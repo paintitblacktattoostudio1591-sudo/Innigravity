@@ -1,0 +1,51 @@
+{
+  "annotations": {
+    "readOnlyHint": true,
+    "title": "Search repositories"
+  },
+  "description": "Find GitHub repositories by name, description, readme, topics, or other metadata. Perfect for discovering projects, finding examples, or locating specific repositories across GitHub.",
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "query"
+    ],
+    "properties": {
+      "minimal_output": {
+        "type": "boolean",
+        "description": "Return minimal repository information - when false returns full GitHub API objects"
+      },
+      "order": {
+        "type": "string",
+        "description": "Sort order (asc/desc)",
+        "enum": [
+          "asc",
+          "desc"
+        ]
+      },
+      "page": {
+        "type": "integer",
+        "description": "Page number for pagination (min 1)"
+      },
+      "perPage": {
+        "type": "integer",
+        "description": "Results per page for pagination (min 1 and max 100)"
+      },
+      "query": {
+        "type": "string",
+        "description": "Repository search query using GitHub search syntax"
+      },
+      "sort": {
+        "type": "string",
+        "description": "Sort repositories by field - defaults to best match",
+        "enum": [
+          "stars",
+          "forks",
+          "help-wanted-issues",
+          "updated"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "name": "search_repositories"
+}

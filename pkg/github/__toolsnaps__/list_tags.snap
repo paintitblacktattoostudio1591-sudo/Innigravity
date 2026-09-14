@@ -1,0 +1,34 @@
+{
+  "annotations": {
+    "readOnlyHint": true,
+    "title": "List tags"
+  },
+  "description": "List git tags in a GitHub repository",
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "owner",
+      "repo"
+    ],
+    "properties": {
+      "owner": {
+        "type": "string",
+        "description": "Repository owner"
+      },
+      "page": {
+        "type": "integer",
+        "description": "Page number for pagination (min 1)"
+      },
+      "perPage": {
+        "type": "integer",
+        "description": "Results per page for pagination (min 1 and max 100)"
+      },
+      "repo": {
+        "type": "string",
+        "description": "Repository name"
+      }
+    },
+    "additionalProperties": false
+  },
+  "name": "list_tags"
+}

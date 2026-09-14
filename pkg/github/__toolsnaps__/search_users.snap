@@ -1,0 +1,46 @@
+{
+  "annotations": {
+    "readOnlyHint": true,
+    "title": "Search users"
+  },
+  "description": "Find GitHub users by username, real name, or other profile information. Useful for locating developers, contributors, or team members.",
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "query"
+    ],
+    "properties": {
+      "order": {
+        "type": "string",
+        "description": "Sort order (asc/desc)",
+        "enum": [
+          "asc",
+          "desc"
+        ]
+      },
+      "page": {
+        "type": "integer",
+        "description": "Page number for pagination (min 1)"
+      },
+      "perPage": {
+        "type": "integer",
+        "description": "Results per page for pagination (min 1 and max 100)"
+      },
+      "query": {
+        "type": "string",
+        "description": "User search query using GitHub search syntax"
+      },
+      "sort": {
+        "type": "string",
+        "description": "Sort users by followers/repositories/joined",
+        "enum": [
+          "followers",
+          "repositories",
+          "joined"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "name": "search_users"
+}

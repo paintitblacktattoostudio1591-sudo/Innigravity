@@ -1,0 +1,41 @@
+{
+  "annotations": {
+    "readOnlyHint": true,
+    "title": "Search code"
+  },
+  "description": "Fast and precise code search across ALL GitHub repositories using GitHub's native search engine. Best for finding exact symbols, functions, classes, or specific code patterns.",
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "query"
+    ],
+    "properties": {
+      "order": {
+        "type": "string",
+        "description": "Sort order for results (asc/desc)",
+        "enum": [
+          "asc",
+          "desc"
+        ]
+      },
+      "page": {
+        "type": "integer",
+        "description": "Page number for pagination (min 1)"
+      },
+      "perPage": {
+        "type": "integer",
+        "description": "Results per page for pagination (min 1 and max 100)"
+      },
+      "query": {
+        "type": "string",
+        "description": "Search query using GitHub code search syntax"
+      },
+      "sort": {
+        "type": "string",
+        "description": "Sort field (indexed only)"
+      }
+    },
+    "additionalProperties": false
+  },
+  "name": "search_code"
+}

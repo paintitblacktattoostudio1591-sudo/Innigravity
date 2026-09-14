@@ -1,0 +1,57 @@
+{
+  "annotations": {
+    "title": "Push files to repository"
+  },
+  "description": "Push multiple files to a GitHub repository in a single commit",
+  "inputSchema": {
+    "properties": {
+      "branch": {
+        "description": "Branch name to push the commit to",
+        "type": "string"
+      },
+      "files": {
+        "description": "Array of file objects to push, each object with path (string) and content (string)",
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "content": {
+              "description": "Raw file content",
+              "type": "string"
+            },
+            "path": {
+              "description": "Repository-relative file path",
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ],
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "message": {
+        "description": "Commit message",
+        "type": "string"
+      },
+      "owner": {
+        "description": "Repository owner",
+        "type": "string"
+      },
+      "repo": {
+        "description": "Repository name",
+        "type": "string"
+      }
+    },
+    "required": [
+      "owner",
+      "repo",
+      "branch",
+      "files",
+      "message"
+    ],
+    "type": "object"
+  },
+  "name": "push_files"
+}

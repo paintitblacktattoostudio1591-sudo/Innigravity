@@ -1,0 +1,33 @@
+{
+  "annotations": {
+    "title": "Create branch"
+  },
+  "description": "Create a new branch in a GitHub repository",
+  "inputSchema": {
+    "properties": {
+      "branch": {
+        "description": "New branch name, without refs/heads/",
+        "type": "string"
+      },
+      "from_branch": {
+        "description": "Source branch name; defaults to the repository default branch",
+        "type": "string"
+      },
+      "owner": {
+        "description": "Repository owner",
+        "type": "string"
+      },
+      "repo": {
+        "description": "Repository name",
+        "type": "string"
+      }
+    },
+    "required": [
+      "owner",
+      "repo",
+      "branch"
+    ],
+    "type": "object"
+  },
+  "name": "create_branch"
+}

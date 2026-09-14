@@ -1,0 +1,116 @@
+package github
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"regexp"
+
+	"github.com/github/github-mcp-server/pkg/utils"
+	"github.com/google/go-github/v79/github"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+)
+
+func hasFilter(query, filterType string) bool {
+	// Match filter at start of string, after whitespace, or after non-word characters like '('
+	pattern := fmt.Sprintf(`(^|\s|\W)%s:\S+`, regexp.QuoteMeta(filterType))
+	matched, _ := regexp.MatchString(pattern, query)
+	return matched
+}
+
+func hasSpecificFilter(query, filterType, filterValue string) bool {
+	// Match specific filter:value at start, after whitespace, or after non-word characters
+	// End with word boundary, whitespace, or non-word characters like ')'
+	pattern := fmt.Sprintf(`(^|\s|\W)%s:%s($|\s|\W)`, regexp.QuoteMeta(filterType), regexp.QuoteMeta(filterValue))
+	matched, _ := regexp.MatchString(pattern, query)
+	return matched
+}
+
+func hasRepoFilter(query string) bool {
+	return hasFilter(query, "repo")
+}
+
+func hasTypeFilter(query string) bool {
+	return hasFilter(query, "type")
+}
+
+func searchHandler(
+	ctx context.Context,
+	getClient GetClientFn,
+	args map[string]any,
+	searchType string,
+	errorPrefix string,
+) (*mcp.CallToolResult, any, error) {
+	query, err := RequiredParam[string](args, "query")
+	if err != nil {
+		return utils.NewToolResultError(err.Error()), nil, nil
+	}
+
+	if !hasSpecificFilter(query, "is", searchType) {
+		query = fmt.Sprintf("is:%s %s", searchType, query)
+	}
+
+	owner, err := OptionalParam[string](args, "owner")
+	if err != nil {
+		return utils.NewToolResultError(err.Error()), nil, nil
+	}
+
+	repo, err := OptionalParam[string](args, "repo")
+	if err != nil {
+		return utils.NewToolResultError(err.Error()), nil, nil
+	}
+
+	if owner != "" && repo != "" && !hasRepoFilter(query) {
+		query = fmt.Sprintf("repo:%s/%s %s", owner, repo, query)
+	}
+
+	sort, err := OptionalParam[string](args, "sort")
+	if err != nil {
+		return utils.NewToolResultError(err.Error()), nil, nil
+	}
+	order, err := OptionalParam[string](args, "order")
+	if err != nil {
+		return utils.NewToolResultError(err.Error()), nil, nil
+	}
+	pagination, err := OptionalPaginationParams(args)
+	if err != nil {
+		return utils.NewToolResultError(err.Error()), nil, nil
+	}
+
+	opts := &github.SearchOptions{
+		// Default to "created" if no sort is provided, as it's a common use case.
+		Sort:  sort,
+		Order: order,
+		ListOptions: github.ListOptions{
+			Page:    pagination.Page,
+			PerPage: pagination.PerPage,
+		},
+	}
+
+	client, err := getClient(ctx)
+	if err != nil {
+		return nil, nil, fmt.Errorf("%s: failed to get GitHub client: %w", errorPrefix, err)
+	}
+	result, resp, err := client.Search.Issues(ctx, query, opts)
+	if err != nil {
+		return nil, nil, fmt.Errorf("%s: %w", errorPrefix, err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	if resp.StatusCode != http.StatusOK {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, nil, fmt.Errorf("%s: failed to read response body: %w", errorPrefix, err)
+		}
+		return utils.NewToolResultError(fmt.Sprintf("%s: %s", errorPrefix, string(body))), nil, nil
+	}
+
+	r, err := json.Marshal(result)
+	if err != nil {
+		return nil, nil, fmt.Errorf("%s: failed to marshal response: %w", errorPrefix, err)
+	}
+
+	return utils.NewToolResultText(string(r)), nil, nil
+}

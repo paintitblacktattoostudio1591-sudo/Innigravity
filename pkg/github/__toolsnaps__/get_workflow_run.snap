@@ -1,0 +1,31 @@
+{
+  "annotations": {
+    "openWorldHint": true,
+    "readOnlyHint": true,
+    "title": "Get workflow run"
+  },
+  "description": "Get details of a specific workflow run",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "owner": {
+        "type": "string",
+        "description": "Repository owner"
+      },
+      "repo": {
+        "type": "string",
+        "description": "Repository name"
+      },
+      "run_id": {
+        "type": "number",
+        "description": "The unique identifier of the workflow run"
+      }
+    },
+    "required": [
+      "owner",
+      "repo",
+      "run_id"
+    ]
+  },
+  "name": "get_workflow_run"
+}

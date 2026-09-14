@@ -1,0 +1,57 @@
+{
+  "annotations": {
+    "title": "Search issues",
+    "readOnlyHint": true
+  },
+  "description": "Search for issues in GitHub repositories using issues search syntax already scoped to is:issue",
+  "inputSchema": {
+    "properties": {
+      "cursor": {
+        "description": "Cursor for pagination. Use the cursor value from the previous response's pagination metadata to retrieve the next page. Leave blank for the first page.",
+        "type": "string"
+      },
+      "order": {
+        "description": "Sort order",
+        "enum": [
+          "asc",
+          "desc"
+        ],
+        "type": "string"
+      },
+      "owner": {
+        "description": "Optional repository owner. If provided with repo, only issues for this repository are listed.",
+        "type": "string"
+      },
+      "query": {
+        "description": "Search query using GitHub issues search syntax",
+        "type": "string"
+      },
+      "repo": {
+        "description": "Optional repository name. If provided with owner, only issues for this repository are listed.",
+        "type": "string"
+      },
+      "sort": {
+        "description": "Sort field by number of matches of categories, defaults to best match",
+        "enum": [
+          "comments",
+          "reactions",
+          "reactions-+1",
+          "reactions--1",
+          "reactions-smile",
+          "reactions-thinking_face",
+          "reactions-heart",
+          "reactions-tada",
+          "interactions",
+          "created",
+          "updated"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "query"
+    ],
+    "type": "object"
+  },
+  "name": "search_issues"
+}

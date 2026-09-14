@@ -1,0 +1,29 @@
+{
+  "annotations": {
+    "title": "List branches",
+    "readOnlyHint": true
+  },
+  "description": "List branches in a GitHub repository",
+  "inputSchema": {
+    "properties": {
+      "cursor": {
+        "description": "Cursor for pagination. Use the cursor value from the previous response's pagination metadata to retrieve the next page. Leave blank for the first page.",
+        "type": "string"
+      },
+      "owner": {
+        "description": "Repository owner",
+        "type": "string"
+      },
+      "repo": {
+        "description": "Repository name",
+        "type": "string"
+      }
+    },
+    "required": [
+      "owner",
+      "repo"
+    ],
+    "type": "object"
+  },
+  "name": "list_branches"
+}

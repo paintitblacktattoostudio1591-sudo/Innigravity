@@ -1,0 +1,42 @@
+{
+  "annotations": {
+    "readOnlyHint": true,
+    "title": "Get file or directory contents"
+  },
+  "description": "Get the contents of a file or directory from a GitHub repository",
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "owner",
+      "repo"
+    ],
+    "properties": {
+      "owner": {
+        "type": "string",
+        "description": "Repository owner (username or organization)"
+      },
+      "path": {
+        "type": "string",
+        "description": "Path to file/directory",
+        "default": "/"
+      },
+      "raw_content": {
+        "type": "boolean",
+        "description": "If true, returns file content as plain text (for text files) or base64-encoded (for binary files) instead of embedded resource format. Useful for clients that don't support embedded resources."
+      },
+      "ref": {
+        "type": "string",
+        "description": "Accepts optional git refs such as refs/tags/{tag}, refs/heads/{branch} or refs/pull/{pr_number}/head"
+      },
+      "repo": {
+        "type": "string",
+        "description": "Repository name"
+      },
+      "sha": {
+        "type": "string",
+        "description": "Accepts optional commit SHA. If specified, it will be used instead of ref"
+      }
+    }
+  },
+  "name": "get_file_contents"
+}

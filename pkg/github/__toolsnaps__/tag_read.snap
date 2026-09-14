@@ -1,0 +1,49 @@
+{
+  "annotations": {
+    "title": "Read operations for git tags",
+    "readOnlyHint": true
+  },
+  "description": "Read operations for Git tags in a repository.\n\nAvailable methods:\n- list: List all git tags in a repository.\n- get: Get details about a specific git tag.\n",
+  "inputSchema": {
+    "properties": {
+      "method": {
+        "description": "The read operation to perform on tags.",
+        "enum": [
+          "list",
+          "get"
+        ],
+        "type": "string"
+      },
+      "owner": {
+        "description": "Repository owner",
+        "type": "string"
+      },
+      "page": {
+        "description": "Page number for pagination (min 1)",
+        "minimum": 1,
+        "type": "number"
+      },
+      "perPage": {
+        "description": "Results per page for pagination (min 1, max 100)",
+        "maximum": 100,
+        "minimum": 1,
+        "type": "number"
+      },
+      "repo": {
+        "description": "Repository name",
+        "type": "string"
+      },
+      "tag": {
+        "description": "Tag name (required for get method)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "method",
+      "owner",
+      "repo"
+    ],
+    "type": "object"
+  },
+  "name": "tag_read"
+}
